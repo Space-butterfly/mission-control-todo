@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SatGuard Encryption</title>
+</head>
+<body>
+    <h2>🛰️ SatGuard Encryption Test</h2>
+
+    <input id="text" placeholder="Enter your message">
+    <br><br>
+
+    <button onclick="encrypt()">Encrypt</button>
+    <button onclick="decrypt()">Decrypt</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        const API_URL = "http://127.0.0.1:5000";
+        const ACCESS_TOKEN = "nasa_secure_access_963";  // must match app.py
+
+        async function encrypt() {
+            const text = document.getElementById("text").value;
+            const res = await fetch(`${API_URL}/encrypt`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, token: ACCESS_TOKEN })
+            });
+            const data = await res.json();
+            document.getElementById("result").innerText =
+                data.encrypted ? `🔒 Encrypted: ${data.encrypted}` : `❌ ${data.error}`;
+        }
+
+        async function decrypt() {
+            const text = document.getElementById("text").value;
+            const res = await fetch(`${API_URL}/decrypt`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text, token: ACCESS_TOKEN })
+            });
+            const data = await res.json();
+            document.getElementById("result").innerText =
+                data.decrypted ? `🔓 Decrypted: ${data.decrypted}` : `❌ ${data.error}`;
+        }
+    </script>
+</body>
+</html>
